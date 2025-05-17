@@ -32,14 +32,14 @@ export class Lightning {
                 })
                 .to(this.sprite, {
                     alpha: 0,
-                    duration: 1,
+                    duration: 3,
                     ease: 'power1.out'
                 });
             // Screen shake
             gsap.to(this.app.stage, {
                 x: 10,
                 duration: 0.1,
-                ease: 'steps(2)',
+                ease: 'steps(3)',
                 yoyo: true,
                 repeat: 5,
                 onComplete: () => {
@@ -63,7 +63,7 @@ export class Lightning {
             setTimeout(() => {
                 this.createEffect();
                 triggerLightning();
-            }, 6000);
+            }, delay);
         };
 
         triggerLightning();

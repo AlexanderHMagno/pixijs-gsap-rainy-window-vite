@@ -1,0 +1,159 @@
+import { useEffect, useRef, useState } from 'react';
+import * as PIXI from 'pixi.js';
+import gsap from 'gsap';
+import { Lightning } from './components/Lightning';
+import { Background } from './components/Background';
+import { RainDrop } from './components/RainDrop';
+import { Sound } from './components/Sound';
+import styled from 'styled-components';
+
+const ControlsContainer = styled.div`
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+`;
+
+const StyledButton = styled.button`
+  background: linear-gradient(to right, #000000, #000000, #8A2BE2);
+  border: 1px solid black;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  font-size: 18px;
+  color: white;
+  cursor: pointer;
+  margin: 5px 0;
+`;
+
+function App() {
+  const appRef = useRef<PIXI.Application | null>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [components, setComponents] = useState<{
+    rainDrop?: RainDrop;
+    rainSound?: Sound;
+    thunderSound?: Sound;
+    lightning?: Lightning;
+    background?: Background;
+  }>({});
+
+  useEffect(() => {
+    const initializeApp = async () => {
+      // Initialize PIXI Application
+      const app = new PIXI.Application();
+      await app.init({
+        resizeTo: window,
+        backgroundColor: 0x000000,
+      });
+
+      if (canvasRef.current) {
+        canvasRef.current.appendChild(app.canvas);
+      }
+
+      appRef.current = app;
+
+      // Load textures
+      await PIXI.Assets.load([
+        'images/raindrop.png',
+        'images/heart.png',
+        'images/background.png',
+        'images/house.png',
+        'images/lightning.png'
+      ]);
+
+      const textures = {
+        raindrop: PIXI.Assets.get('images/raindrop.png'),
+        heart: PIXI.Assets.get('images/heart.png'),
+        background: PIXI.Assets.get('images/background.png'),
+        house: PIXI.Assets.get('images/house.png'),
+        lightning: PIXI.Assets.get('images/lightning.png')
+      };
+
+      // Initialize components
+      const rainDrop = new RainDrop(app, textures.raindrop);
+      const rainSound = new Sound('sounds/rain.mp3', true);
+      const thunderSound = new Sound('sounds/thunder.mp3');
+      const lightning = new Lightning(app, textures.lightning, thunderSound);
+      const background = new Background(app, textures.house);
+
+      setComponents({
+        rainDrop,
+        rainSound,
+        thunderSound,
+        lightning,
+        background
+      });
+
+      // Start visual effects
+      rainDrop.createMultiple(50);
+      lightning.startWeatherEffects();
+
+      // Heart click handler
+      app.stage.eventMode = 'static';
+      app.stage.on('pointerdown', async (event) => {
+        const heart = new PIXI.Sprite(textures.heart);
+        heart.zIndex = 1000;
+        heart.anchor.set(0.5);
+        heart.position.copyFrom(event.global);
+        heart.scale.set(100);
+        heart.alpha = 1;
+        heart.tint = 0xFF0000;
+        app.stage.addChild(heart);
+
+        gsap.to(heart, {
+          alpha: 0.5,
+          scale: 1,
+          duration: 0.1,
+          ease: 'power1.out',
+          onComplete: () => {
+            setTimeout(() => {
+              app.stage.removeChild(heart);
+            }, 1000);
+          }
+        });
+      });
+    };
+
+    initializeApp();
+
+    // Cleanup
+    return () => {
+      if (appRef.current) {
+        appRef.current.destroy(true);
+      }
+    };
+  }, []);
+
+  const handlePlaySound = () => {
+    if (components.rainSound) {
+      components.rainSound.play();
+      setIsPlaying(components.rainSound.isCurrentlyPlaying());
+    }
+  };
+
+  const handleToggleThunder = () => {
+    if (components.lightning) {
+      components.lightning.toggleInteraction();
+    }
+  };
+
+  return (
+    <div>
+      <div ref={canvasRef} />
+      <ControlsContainer>
+        <StyledButton onClick={handlePlaySound}>
+          {isPlaying ? 'Pause Sound' : 'Play Sound'}
+        </StyledButton>
+        <StyledButton onClick={handleToggleThunder}>
+          Toggle Thunder
+        </StyledButton>
+      </ControlsContainer>
+    </div>
+  );
+}
+
+export default App; 
