@@ -5,13 +5,9 @@ export class RainDrop {
     private app: PIXI.Application;
     private texture: PIXI.Texture;
 
-    private sound: HTMLAudioElement;
-
     constructor(app: PIXI.Application, texture: PIXI.Texture) {
         this.app = app;
         this.texture = texture;
-        this.sound = new Audio('sounds/rain.mp3');
-        this.sound.loop = true;
     }
 
     create() {
@@ -38,18 +34,6 @@ export class RainDrop {
     createMultiple(count: number) {
         for (let i = 0; i < count; i++) {
             this.create();
-        }
-    }
-
-    async playSound() {
-        try {
-            if (this.sound.paused) {
-                await this.sound.play();
-            } else {
-                this.sound.pause();
-            } 
-        } catch (error) {
-            console.log('Audio playback requires user interaction first');
         }
     }
 } 

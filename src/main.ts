@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { Lightning } from './components/Lightning';
 import { Background } from './components/Background';
 import { RainDrop } from './components/RainDrop';
+import { Sound } from './components/Sound';
 
 // Initialize application using the new API
 const app = new PIXI.Application();
@@ -33,30 +34,40 @@ const textures = {
 const lightning = new Lightning(app, textures.lightning);
 const background = new Background(app, textures.house);
 const rainDrop = new RainDrop(app, textures.raindrop);
+const rainSound = new Sound('sounds/rain.mp3', true);
 
 // Start visual effects
 rainDrop.createMultiple(50);
 lightning.startWeatherEffects();
 
-// Add a start button or overlay for initial interaction
+// Create controls container
+const controls = document.createElement('div');
+controls.style.position = 'absolute';
+controls.style.bottom = '10%';
+controls.style.right = '10%';
+controls.style.display = 'flex';
+controls.style.flexDirection = 'column';
+controls.style.alignItems = 'center';
+controls.style.padding = '20px';
+document.body.appendChild(controls);
+
+// Create play button
 const startButton = document.createElement('button');
 startButton.textContent = 'Play Sound';
-startButton.style.position = 'absolute';
 startButton.style.background = 'linear-gradient(to right, #000000, #000000, #8A2BE2)';
 startButton.style.border = '1px solid black';
 startButton.style.borderRadius = '50%';
 startButton.style.width = '100px';
 startButton.style.height = '100px';
-startButton.style.bottom = '10%';
-startButton.style.right = '10%';
-startButton.style.padding = '15px 30px';
 startButton.style.fontSize = '18px';
 startButton.style.color = 'white';
 startButton.style.cursor = 'pointer';
-document.body.appendChild(startButton);
+controls.appendChild(startButton);
 
+// Event handler
 startButton.onclick = () => {
-    rainDrop.playSound();
+    rainSound.play();
+    startButton.textContent = rainSound.isCurrentlyPlaying() ? 'Pause Sound' : 'Play Sound';
 };
 
 // Heart click handler
