@@ -11,4 +11,11 @@ services:
       - /app/node_modules  # Prevent overwriting node_modules
     environment:
       - NODE_ENV=development
-    command: npm run dev -- --host 
+      - VITE_HOST=0.0.0.0
+    command: npm run dev
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge 

@@ -34,9 +34,30 @@ const lightning = new Lightning(app, textures.lightning);
 const background = new Background(app, textures.house);
 const rainDrop = new RainDrop(app, textures.raindrop);
 
-// Start effects
+// Start visual effects
 rainDrop.createMultiple(50);
 lightning.startWeatherEffects();
+
+// Add a start button or overlay for initial interaction
+const startButton = document.createElement('button');
+startButton.textContent = 'Play Sound';
+startButton.style.position = 'absolute';
+startButton.style.background = 'linear-gradient(to right, #000000, #000000, #8A2BE2)';
+startButton.style.border = '1px solid black';
+startButton.style.borderRadius = '50%';
+startButton.style.width = '100px';
+startButton.style.height = '100px';
+startButton.style.bottom = '10%';
+startButton.style.right = '10%';
+startButton.style.padding = '15px 30px';
+startButton.style.fontSize = '18px';
+startButton.style.color = 'white';
+startButton.style.cursor = 'pointer';
+document.body.appendChild(startButton);
+
+startButton.onclick = () => {
+    rainDrop.playSound();
+};
 
 // Heart click handler
 app.stage.eventMode = 'static';
