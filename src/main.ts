@@ -31,10 +31,11 @@ const textures = {
 };
 
 // Initialize components
-const lightning = new Lightning(app, textures.lightning);
-const background = new Background(app, textures.house);
 const rainDrop = new RainDrop(app, textures.raindrop);
 const rainSound = new Sound('sounds/rain.mp3', true);
+const thunderSound = new Sound('sounds/thunder.mp3');
+const lightning = new Lightning(app, textures.lightning, thunderSound);
+const background = new Background(app, textures.house);
 
 // Start visual effects
 rainDrop.createMultiple(50);
@@ -64,10 +65,26 @@ startButton.style.color = 'white';
 startButton.style.cursor = 'pointer';
 controls.appendChild(startButton);
 
+//toggle Thunder button
+const thunderButton = document.createElement('button');
+thunderButton.textContent = 'Toggle Thunder';
+thunderButton.style.background = 'linear-gradient(to right, #000000, #000000, #8A2BE2)';
+thunderButton.style.border = '1px solid black';
+thunderButton.style.borderRadius = '50%';
+thunderButton.style.width = '100px';
+thunderButton.style.height = '100px';
+thunderButton.style.fontSize = '18px';
+thunderButton.style.color = 'white';
+thunderButton.style.cursor = 'pointer';
+thunderButton.onclick = () => {
+    lightning.toggleInteraction();
+}
+controls.appendChild(thunderButton);
+
 // Event handler
 startButton.onclick = () => {
     rainSound.play();
-    startButton.textContent = rainSound.isCurrentlyPlaying() ? 'Pause Sound' : 'Play Sound';
+    startButton.innerHTML = rainSound.isCurrentlyPlaying() ? 'Pause Sound' : 'Play Sound';
 };
 
 // Heart click handler

@@ -8,6 +8,7 @@ export class Sound {
     }
 
     async play() {
+
         try {
             if (this.sound.paused) {
                 await this.sound.play();
@@ -25,6 +26,10 @@ export class Sound {
         this.sound.pause();
         this.sound.currentTime = 0;
         this.isPlaying = false;
+    }
+
+    isActive(): boolean {
+        return !this.sound.muted;
     }
 
     setVolume(volume: number) {
