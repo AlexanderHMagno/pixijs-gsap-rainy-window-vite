@@ -33,6 +33,7 @@ function App() {
   const appRef = useRef<PIXI.Application | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isThunderEnabled, setIsThunderEnabled] = useState(true);
   const [components, setComponents] = useState<{
     rainDrop?: RainDrop;
     rainSound?: Sound;
@@ -131,16 +132,18 @@ function App() {
   const handlePlaySound = () => {
     if (components.rainSound) {
       components.rainSound.play();
-      setIsPlaying(components.rainSound.isCurrentlyPlaying());
+      setIsPlaying(!isPlaying);
     }
   };
 
   const handleToggleThunder = () => {
     if (components.lightning) {
       components.lightning.toggleInteraction();
+      setIsThunderEnabled(!isThunderEnabled);
     }
   };
 
+  console.log(isPlaying);
   return (
     <div>
       <div ref={canvasRef} />
@@ -149,7 +152,7 @@ function App() {
           {isPlaying ? 'Pause Sound' : 'Play Sound'}
         </StyledButton>
         <StyledButton onClick={handleToggleThunder}>
-          Toggle Thunder
+          {isThunderEnabled? 'Disable Thunder' : 'Enable Thunder'}
         </StyledButton>
       </ControlsContainer>
     </div>
