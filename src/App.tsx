@@ -117,7 +117,7 @@ function App() {
         gsap.timeline()
         .to(heart, {
           alpha: 0.5,
-          scale: 0.2,
+          scale: 0.1,
           duration: 0.1,
           ease: 'power1.out',
         })
@@ -127,7 +127,7 @@ function App() {
           onComplete: () => {
             setTimeout(() => {
               app.stage.removeChild(heart);
-            }, 3000);
+            }, 2000);
           }
         });
       });

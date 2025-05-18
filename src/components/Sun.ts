@@ -9,7 +9,7 @@ export class Sun {
     private isEnabled: boolean = true;
     private color: number = 0x808080;
     private texture: PIXI.Texture;
-    private speed: number = 300;
+    private speed: number = 200;
     constructor(app: PIXI.Application, texture: PIXI.Texture) {
         this.app = app;
         this.texture = texture;
@@ -71,7 +71,7 @@ export class Sun {
             // Animate sun
             gsap.timeline()
                 .to(this.sprite, {
-                    x: -300,
+                    x: -100,
                     y: this.sprite.y + 100,
                     duration: this.speed,
                     ease: 'none',
@@ -84,7 +84,7 @@ export class Sun {
                     ease: 'none',
                 })
                 .to(this.sprite, {
-                    x: this.app.screen.width + 200,
+                    x: this.app.screen.width,
                     alpha: 0,
                     duration: 0.1,
                     ease: 'none',
