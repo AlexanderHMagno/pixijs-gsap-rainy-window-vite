@@ -47,6 +47,9 @@ function App() {
     backgroundDay?: Background;
     sun?: Sun;
   }>({});
+  const urlParams = new URLSearchParams(window.location.search);
+  const message = useRef<string | null>(urlParams.get('message'));
+
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -111,7 +114,18 @@ function App() {
       // Heart click handler
       app.stage.eventMode = 'static';
       app.stage.on('pointerdown', async (event) => {
-        const heart = new PIXI.Sprite(textures.heart);
+
+        
+        // const heart = new PIXI.Sprite(textures.heart);
+        const displayText = message.current?.replace(/-/g, '\n') ?? '';
+        const heart = new PIXI.Text({
+          text: displayText,
+          style: {
+            fontFamily: 'Brush Script MT, cursive',
+            fontSize: 30,
+            fill: 0xFFFFFF,
+          }
+        });
         heart.zIndex = 1000;
         heart.anchor.set(0.5);
         heart.position.copyFrom(event.global);
@@ -123,7 +137,6 @@ function App() {
         gsap.timeline()
         .to(heart, {
           alpha: 0.5,
-          scale: 0.1,
           duration: 0.1,
           ease: 'power1.out',
         })
