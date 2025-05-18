@@ -21,7 +21,7 @@ export class Sun extends BaseClass {
 
         // Add blur filter for glow effect using the new property
         const blurFilter = new PIXI.BlurFilter();
-        blurFilter.blur = 1; // Using strength instead of blur
+        blurFilter.strength = 0.2; // Using strength instead of blur
         this.sprite.filters = [blurFilter];
 
         // Create ambient light

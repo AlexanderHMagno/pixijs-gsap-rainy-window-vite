@@ -21,8 +21,8 @@ export class Lightning extends BaseClass {
 
     createEffect() {
 
-        console.log(this.isInteractionEnabled);
-        if (this.isInteractionEnabled) {
+        
+        if (this.getVisibility()) {
             gsap.timeline()
                 .to(this.sprite, {
                     alpha: 1,
@@ -52,9 +52,6 @@ export class Lightning extends BaseClass {
         this.intervalThunder = interval * 1000;
     }
 
-    toggleInteraction() {
-        this.isInteractionEnabled = !this.isInteractionEnabled;
-    }
 
     startWeatherEffects() {
         const triggerLightning = () => {

@@ -158,7 +158,7 @@ function App() {
 
   const handleToggleThunder = () => {
     if (components.lightning) {
-      components.lightning.toggleInteraction();
+      components.lightning.toggleVisibility();
       setIsThunderEnabled(!isThunderEnabled);
     }
   };
