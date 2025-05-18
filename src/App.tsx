@@ -175,7 +175,7 @@ function App() {
       components.background.toggleVisibility();
       components.backgroundDay.toggleVisibility();
 
-      if(components.backgroundDay.getVisibility()) {
+      if(components.backgroundDay.getVisibility() &&  components.lightning && components.lightning.getVisibility()) {
         handleToggleThunder();
       } 
 
