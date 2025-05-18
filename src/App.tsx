@@ -37,12 +37,14 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isThunderEnabled, setIsThunderEnabled] = useState(true);
   const [isSunEnabled, setIsSunEnabled] = useState(true);
+  const [isNight, setIsNight] = useState(true);
   const [components, setComponents] = useState<{
     rainDrop?: RainDrop;
     rainSound?: Sound;
     thunderSound?: Sound;
     lightning?: Lightning;
     background?: Background;
+    backgroundDay?: Background;
     sun?: Sun;
   }>({});
 
@@ -67,6 +69,7 @@ function App() {
         'images/heart.png',
         'images/background.png',
         'images/house.png',
+        'images/dayhouse.png',
         'images/lightning.png',
         'images/moon.png'
       ]);
@@ -76,6 +79,7 @@ function App() {
         heart: PIXI.Assets.get('images/heart.png'),
         background: PIXI.Assets.get('images/background.png'),
         house: PIXI.Assets.get('images/house.png'),
+        dayhouse: PIXI.Assets.get('images/dayhouse.png'),
         lightning: PIXI.Assets.get('images/lightning.png'),
         moon: PIXI.Assets.get('images/moon.png')
       };
@@ -86,6 +90,7 @@ function App() {
       const thunderSound = new Sound('sounds/thunder.mp3');
       const lightning = new Lightning(app, textures.lightning, thunderSound);
       const sun = new Sun(app, textures.moon);
+      const backgroundDay = new Background(app, textures.dayhouse, false);
       const background = new Background(app, textures.house);
 
       setComponents({
@@ -94,6 +99,7 @@ function App() {
         thunderSound,
         lightning,
         background,
+        backgroundDay,
         sun
       });
 
@@ -164,6 +170,19 @@ function App() {
     }
   };
 
+  const handleToggleBackground = () => {
+    if (components.background && components.backgroundDay) {
+      components.background.toggleVisibility();
+      components.backgroundDay.toggleVisibility();
+
+      if(components.backgroundDay.getVisibility()) {
+        handleToggleThunder();
+      } 
+
+      setIsNight(!isNight);
+    }
+  };
+
   return (
     <div>
       <div ref={canvasRef} />
@@ -176,6 +195,9 @@ function App() {
         </StyledButton>
         <StyledButton onClick={handleToggleSun}>
           {isSunEnabled ? 'Disable Moon' : 'Enable Moon'}
+        </StyledButton>
+        <StyledButton onClick={handleToggleBackground}>
+          {isNight ? 'Day Mood' : 'Night Mood'}
         </StyledButton>
       </ControlsContainer>
     </div>

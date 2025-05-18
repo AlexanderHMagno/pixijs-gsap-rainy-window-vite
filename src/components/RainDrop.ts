@@ -1,13 +1,11 @@
 import * as PIXI from 'pixi.js';
 import gsap from 'gsap';
+import { BaseClass } from './BaseClass';
 
-export class RainDrop {
-    private app: PIXI.Application;
-    private texture: PIXI.Texture;
+export class RainDrop extends BaseClass {
 
     constructor(app: PIXI.Application, texture: PIXI.Texture) {
-        this.app = app;
-        this.texture = texture;
+        super(app, texture);
     }
 
     create() {

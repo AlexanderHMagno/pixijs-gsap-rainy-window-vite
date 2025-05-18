@@ -1,17 +1,16 @@
 import * as PIXI from 'pixi.js';
 import gsap from 'gsap';
 import { Sound } from './Sound';
+import { BaseClass } from './BaseClass';
 
-export class Lightning {
-    private sprite: PIXI.Sprite;
-    private app: PIXI.Application;
+export class Lightning extends BaseClass {
+
     private sound: Sound;
     private intervalThunder: number = 10000;
     private isInteractionEnabled: boolean = true;
 
     constructor(app: PIXI.Application, texture: PIXI.Texture, sound: Sound, intervalThunder: number = 15000) {
-        this.app = app;
-        this.sprite = new PIXI.Sprite(texture);
+        super(app, texture);
         this.sprite.width = app.screen.width;
         this.sprite.height = app.screen.height;
         this.sprite.alpha = 0;

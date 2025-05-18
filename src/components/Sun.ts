@@ -1,22 +1,17 @@
 import * as PIXI from 'pixi.js';
 import gsap from 'gsap';
+import { BaseClass } from './BaseClass';
 
-export class Sun {
-    private sprite: PIXI.Sprite;
-    private app: PIXI.Application;
+export class Sun extends BaseClass {
+    
     private light: PIXI.Graphics;
     private intervalSun: number = 30000;
     private isEnabled: boolean = true;
     private color: number = 0x808080;
-    private texture: PIXI.Texture;
+    
     private speed: number = 200;
     constructor(app: PIXI.Application, texture: PIXI.Texture) {
-        this.app = app;
-        this.texture = texture;
-
-        // Create sun sprite with gradient
-        // const sunTexture = this.createSunTexture();
-        this.sprite = new PIXI.Sprite(this.texture);
+        super(app, texture);
         this.sprite.width = 100;
         this.sprite.height = 100;
         this.sprite.alpha = 0.8;
@@ -57,9 +52,6 @@ export class Sun {
         return this.app.renderer.generateTexture(graphics);
     }
 
-    toggleVisibility() {
-        this.sprite.visible = !this.sprite.visible;
-    }
 
     createEffect() {
         if (this.isEnabled) {
