@@ -10,12 +10,13 @@ import { Sun } from './components/Sun';
 
 const ControlsContainer = styled.div`
   position: absolute;
-  bottom: 10%;
-  right: 10%;
+  bottom: 1%;
+  right: 1%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   padding: 20px;
+  gap: 20px;
 `;
 
 const StyledButton = styled.button`
@@ -166,7 +167,7 @@ function App() {
   return (
     <div>
       <div ref={canvasRef} />
-      <ControlsContainer style={{display: 'flex', flexDirection: 'row', alignItems: 'space-between', gap: '20px'}}>
+      <ControlsContainer  className='controls-container'>
         <StyledButton onClick={handlePlaySound}>
           {isPlaying ? 'Pause Sound' : 'Play Sound'}
         </StyledButton>
