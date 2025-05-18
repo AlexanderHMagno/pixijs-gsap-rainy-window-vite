@@ -6,6 +6,7 @@ import { Background } from './components/Background';
 import { RainDrop } from './components/RainDrop';
 import { Sound } from './components/Sound';
 import styled from 'styled-components';
+import { Sun } from './components/Sun';
 
 const ControlsContainer = styled.div`
   position: absolute;
@@ -34,12 +35,14 @@ function App() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isThunderEnabled, setIsThunderEnabled] = useState(true);
+  const [isSunEnabled, setIsSunEnabled] = useState(true);
   const [components, setComponents] = useState<{
     rainDrop?: RainDrop;
     rainSound?: Sound;
     thunderSound?: Sound;
     lightning?: Lightning;
     background?: Background;
+    sun?: Sun;
   }>({});
 
   useEffect(() => {
@@ -63,7 +66,8 @@ function App() {
         'images/heart.png',
         'images/background.png',
         'images/house.png',
-        'images/lightning.png'
+        'images/lightning.png',
+        'images/moon.png'
       ]);
 
       const textures = {
@@ -71,7 +75,8 @@ function App() {
         heart: PIXI.Assets.get('images/heart.png'),
         background: PIXI.Assets.get('images/background.png'),
         house: PIXI.Assets.get('images/house.png'),
-        lightning: PIXI.Assets.get('images/lightning.png')
+        lightning: PIXI.Assets.get('images/lightning.png'),
+        moon: PIXI.Assets.get('images/moon.png')
       };
 
       // Initialize components
@@ -79,6 +84,7 @@ function App() {
       const rainSound = new Sound('sounds/rain.mp3', true);
       const thunderSound = new Sound('sounds/thunder.mp3');
       const lightning = new Lightning(app, textures.lightning, thunderSound);
+      const sun = new Sun(app, textures.moon);
       const background = new Background(app, textures.house);
 
       setComponents({
@@ -86,12 +92,14 @@ function App() {
         rainSound,
         thunderSound,
         lightning,
-        background
+        background,
+        sun
       });
 
       // Start visual effects
       rainDrop.createMultiple(50);
       lightning.startWeatherEffects();
+      sun.startEffect();
 
       // Heart click handler
       app.stage.eventMode = 'static';
@@ -100,20 +108,19 @@ function App() {
         heart.zIndex = 1000;
         heart.anchor.set(0.5);
         heart.position.copyFrom(event.global);
-        heart.scale.set(100);
+        heart.scale.set(1);
         heart.alpha = 1;
-        heart.tint = 0xFF0000;
         app.stage.addChild(heart);
 
         gsap.to(heart, {
           alpha: 0.5,
-          scale: 1,
+          scale: 0.2,
           duration: 0.1,
           ease: 'power1.out',
           onComplete: () => {
             setTimeout(() => {
               app.stage.removeChild(heart);
-            }, 1000);
+            }, 3000);
           }
         });
       });
@@ -143,7 +150,13 @@ function App() {
     }
   };
 
-  console.log(isPlaying);
+  const handleToggleSun = () => {
+    if (components.sun) {
+      components.sun.toggleVisibility();
+      setIsSunEnabled(!isSunEnabled);
+    }
+  };
+
   return (
     <div>
       <div ref={canvasRef} />
@@ -153,6 +166,9 @@ function App() {
         </StyledButton>
         <StyledButton onClick={handleToggleThunder}>
           {isThunderEnabled? 'Disable Thunder' : 'Enable Thunder'}
+        </StyledButton>
+        <StyledButton onClick={handleToggleSun}>
+          {isSunEnabled ? 'Disable Moon' : 'Enable Moon'}
         </StyledButton>
       </ControlsContainer>
     </div>
