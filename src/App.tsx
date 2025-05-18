@@ -22,9 +22,9 @@ const StyledButton = styled.button`
   background: linear-gradient(to right, #000000, #000000, #8A2BE2);
   border: 1px solid black;
   border-radius: 50%;
-  width: 100px;
-  height: 100px;
-  font-size: 18px;
+  width: 70px;
+  height: 70px;
+  font-size: 12px;
   color: white;
   cursor: pointer;
   margin: 5px 0;
@@ -109,12 +109,18 @@ function App() {
         heart.anchor.set(0.5);
         heart.position.copyFrom(event.global);
         heart.scale.set(1);
-        heart.alpha = 1;
+        heart.alpha = 0;
         app.stage.addChild(heart);
 
-        gsap.to(heart, {
+
+        gsap.timeline()
+        .to(heart, {
           alpha: 0.5,
           scale: 0.2,
+          duration: 0.1,
+          ease: 'power1.out',
+        })
+        .to(heart, {
           duration: 0.1,
           ease: 'power1.out',
           onComplete: () => {
