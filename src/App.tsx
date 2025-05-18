@@ -160,7 +160,7 @@ function App() {
   return (
     <div>
       <div ref={canvasRef} />
-      <ControlsContainer>
+      <ControlsContainer style={{display: 'flex', flexDirection: 'row', alignItems: 'space-between', gap: '20px'}}>
         <StyledButton onClick={handlePlaySound}>
           {isPlaying ? 'Pause Sound' : 'Play Sound'}
         </StyledButton>
